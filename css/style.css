@@ -1,0 +1,9 @@
+
+.title {
+    margin-top: 2em;
+}
+
+#tweets {
+    margin-top: 1em;
+    border: 1px solid black;
+}
