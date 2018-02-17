@@ -30,11 +30,12 @@
                         <textarea class="form-control" id="tweetInput" maxlength="140" aria-describedby="tweet" placeholder="Enter your status" onkeyup="printCharsRemaining()"></textarea>
                         <small class="form-text text-muted">Remaining characters: <span id="charsRemaining"></span></small>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-primary" onclick="addNewTweetForUser('connor')">Submit</button>
                 </form>
             </div>
         </div>
         <div class="row">
+            <div id="test"></div>
             <div class="col col-sm-3 col-md-3 col-lg-3"></div>
             <!--This is where all the tweets will appear-->
             <div class="col col-sm-6 col-md-6 col-lg-6">
