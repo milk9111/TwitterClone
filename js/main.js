@@ -23,11 +23,14 @@ function printCharsRemaining() {
 
 
 function getTweetsForUser(username) {
+    console.log("in here");
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
+            console.log("Received response");
+            console.log(xhttp.responseText);
             // Typical action to be performed when the document is ready:
-            $("#tweets").innerHTML = xhttp.responseText;
+            $("#tweets").html(xhttp.responseText);
         }
     };
     xhttp.open("GET", "../php/gettweetsforuser.php?user="+username, true);
