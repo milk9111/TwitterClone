@@ -75,13 +75,13 @@ function signin() {
     } else {
         let xhttp = new XMLHttpRequest();
 
-        xhttp.open("POST", "../php/signin.php", true);
+        xhttp.open("POST", "./php/signin.php", true);
         xhttp.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
                 console.log(xhttp.responseText);
                 let response = JSON.parse(xhttp.responseText);
                 if (response['status'] === 200) {
-                    window.location.href = 'feed.html';
+                    window.location.href = './html/feed.html';
                 } else {
                     alert("Username and/or Password are incorrect!");
                 }
