@@ -89,6 +89,8 @@ function signin() {
 
     if (username === "" || password === "") {
         alert ("Username and Password cannot be empty!");
+    } else if (username.includes(" ") || password.includes(" ")) {
+        alert ("Username and Password cannot have spaces!");
     } else {
         let xhttp = new XMLHttpRequest();
 
@@ -154,12 +156,16 @@ function verifyRegisterFields (username, password, passwordVerify) {
         errorMsg += "Username cannot be empty\n";
     } else if (username.length < 6 || username.length > 25) {
         errorMsg += "Username must be between 6 and 25 characters\n";
+    } else if (username.includes(" ")) {
+        errorMsg += "Username cannot have a space\n";
     }
 
     if (password === "") {
         errorMsg += "Password cannot be empty\n";
     } else if (password.length < 6 || password.length > 25) {
         errorMsg += "Password must be between 6 and 25 characters\n";
+    } else if (password.includes(" ")) {
+        errorMsg += "Password cannot have a space\n";
     }
 
     if (passwordVerify === "") {
