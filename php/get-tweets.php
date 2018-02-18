@@ -20,11 +20,11 @@ if (isset($_GET['user'])) {
             echo "Failed to query";
         } else {
             $empty = true;
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { //make the list elements here if the query was successful
                 echo '<li class="list-group-item">' . $row['text'] . '<small class="tweet-date">' . parseDate($row['date']) . '</small></li>';
                 $empty = false;
             }
-            if ($empty) {
+            if ($empty) { //if the query was empty then send this list element instead
                 echo '<li class="list-group-item"> No posts to show! </li>';
             }
         }

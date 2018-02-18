@@ -5,13 +5,19 @@ $(function() {
     $("#tweetInput").val("");
     $("#charsRemaining").text(140);
 
+    if (document.getElementById("loading") != null) {
+        document.getElementById("loading").style.display = "none";
+    }
+
     let cookie = document.cookie;
     let params = cookie.split(";");
     let uname = params[0];
 
     let $uname = $("#uname");
     $uname.text(uname.substring(uname.indexOf("=")+1, uname.length));
-    getTweetsForUser($uname.text());
+    if (window.location.href.includes("feed.html")) {
+        getTweetsForUser($uname.text());
+    }
 });
 
 
@@ -42,10 +48,12 @@ function getTweetsForUser(username) {
             $("#tweets").html(xhttp.responseText);
             $("#tweetInput").val("");
             $("#charsRemaining").text(140);
+            document.getElementById("loading").style.display = "none";
         }
     };
     xhttp.open("GET", "../php/get-tweets.php?user="+username, true);
     xhttp.send();
+    document.getElementById("loading").style.display = "inline-block";
 }
 
 
@@ -65,12 +73,14 @@ function addNewTweetForUser(username) {
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
             getTweetsForUser(username);
+            $("#submit").disabled = false;
         }
     };
 
     xhttp.open("GET", "../php/add-new-tweet.php?user="+username+"&text="+$tweetInput.val(), true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send();
+    $("#submit").disabled = true;
 }
 
 
@@ -97,7 +107,6 @@ function signin() {
         xhttp.open("POST", "./php/signin.php", true);
         xhttp.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
-                console.log(xhttp.responseText);
                 let response = JSON.parse(xhttp.responseText);
                 if (response['status'] === 200) {
                     window.location.href = './html/feed.html';
@@ -109,10 +118,20 @@ function signin() {
         };
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("username="+username+"&password="+password);
+        document.getElementById("loading").style.display = 'inline-block';
+        $("#submit").disabled = true;
     }
 }
 
 
+/**
+ * This does the registration for a new user. After verifying that the
+ * input fields are correct, it will make a POST call to register.php
+ * in order to first make sure the username is not already taken, then if it
+ * is successful, to make a new user. It will return a status code corresponding
+ * to the result of the action. 200 is good to go, anything in the 100's was
+ * a failure.
+ */
 function register() {
     let username = $("#username").val();
     let password = $("#password").val();
@@ -143,13 +162,25 @@ function register() {
         };
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("username="+username+"&password="+password);
-
+        document.getElementById("loading").style.display = 'inline-block';
+        $("#submit").disabled = true;
     } else {
         alert (errorMsg);
     }
 }
 
 
+/**
+ * Verifies that the fields follow the input standards. None of them can
+ * be empty, they must be between 6 and 25 characters long, they cannot
+ * have a space, and the two password fields must match.
+ *
+ * @param username
+ * @param password
+ * @param passwordVerify
+ * @returns {string} The error message to print. If it's empty, then there
+ * was no issues and the registration is good to go.
+ */
 function verifyRegisterFields (username, password, passwordVerify) {
     let errorMsg = "";
     if (username === "") {

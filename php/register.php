@@ -31,7 +31,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 if (!$result) {
                     echo json_encode(array('status' => 150)); //Inserting the new user failed
                 } else {
-                    echo json_encode(array('status' => 200));
+                    echo json_encode(array('status' => 200)); //Inserting the new user succeeded
                 }
             } else {
                 echo json_encode(array('status'=>100)); //That user already exists

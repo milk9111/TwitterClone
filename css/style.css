@@ -22,4 +22,19 @@ h2 {
     width: 100px;
 }
 
+#loading {
+    display: none;
+}
+
+.gly-ani {
+    animation: ani 1s infinite linear;
+}
+@keyframes ani {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(359deg);
+    }
+}
 

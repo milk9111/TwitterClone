@@ -33,7 +33,7 @@
                         <textarea class="form-control" id="tweetInput" maxlength="140" aria-describedby="tweet" placeholder="Enter your status" onkeyup="printCharsRemaining()"></textarea>
                         <small class="form-text text-muted">Remaining characters: <span id="charsRemaining"></span></small>
                     </div>
-                    <button type="button" class="btn btn-primary" onclick="addNewTweetForUser($('#uname').text())">Submit</button>
+                    <button id="submit" type="button" class="btn btn-primary" onclick="addNewTweetForUser($('#uname').text())">Submit</button>
                 </form>
             </div>
         </div>
@@ -48,10 +48,12 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-
-
-    </script>
+    <div class="row">
+        <div class="col col-sm-3 col-md-3 col-lg-3"></div>
+        <div class="col col-sm-6 col-md-6 col-lg-6">
+            <span id="loading" class="glyphicon glyphicon-refresh gly-ani" style="font-size:40px;"></span>
+        </div>
+    </div>
     <script src="../js/main.js"></script>
 </body>
 </html>
