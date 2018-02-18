@@ -1,8 +1,6 @@
 <?php
 include("../connection.php");
 
-print_r($_POST);
-print_r($_GET);
 if ((isset($_POST['username']) && isset($_POST['password'])) || (isset($_GET['username']) && isset($_GET['password']))) {
     if (isset($_POST['username'])) {
         $user = $_POST['username'];
@@ -28,11 +26,11 @@ if ((isset($_POST['username']) && isset($_POST['password'])) || (isset($_GET['us
         } else {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 if($row['password'] == $psw){
-                    echo "Login Successful!";
+                    echo json_encode(array("status"=>200));
                     //header('Location: ../html/feed.html');
                     exit();
                 }else {
-                    echo "Incorrect Username or Password!";
+                    echo json_encode(array("status"=>100));
                 }
             }
         }
