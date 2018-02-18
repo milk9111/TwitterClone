@@ -113,6 +113,8 @@ function signin() {
                     document.cookie="username="+username+";";
                 } else {
                     alert("Username and/or Password are incorrect!");
+                    document.getElementById("loading").style.display = 'none';
+                    $("#submit").disabled = false;
                 }
             }
         };
@@ -157,6 +159,8 @@ function register() {
                     } else {
                         alert("Back end failed to insert new user");
                     }
+                    document.getElementById("loading").style.display = 'none';
+                    $("#submit").disabled = false;
                 }
             }
         };
