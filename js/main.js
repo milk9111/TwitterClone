@@ -41,6 +41,11 @@ function getTweetsForUser(username) {
 }
 
 
+/**
+ * Adds the tweet to the given user's log of tweets.
+ *
+ * @param username The String username used to save the tweets
+ */
 function addNewTweetForUser(username) {
     let $tweetInput = $("#tweetInput");
     if ($tweetInput.val() === "") {
@@ -58,4 +63,31 @@ function addNewTweetForUser(username) {
     xhttp.open("GET", "../php/add-new-tweet.php?user="+username+"&text="+$tweetInput.val(), true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send();
+}
+
+
+function signin() {
+    let username = $("#username").val();
+    let password = $("#password").val();
+
+    if (username === "" || password === "") {
+        alert ("Username and Password cannot be empty!");
+        return;
+    } else {
+
+        let xhttp = new XMLHttpRequest();
+
+        xhttp.open("POST", "../php/signin.php", true);
+        xhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                window.location.href = 'feed.html';
+            }
+            console.log(this.readyState + ", " + this.status);
+            if (this.status === 404) {
+                console.log(xhttp.responseText);
+            }
+        };
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("username="+username+"&password="+password);
+    }
 }
