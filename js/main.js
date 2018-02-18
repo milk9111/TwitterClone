@@ -83,7 +83,6 @@ function signin() {
                 if (response['status'] === 200) {
                     window.location.href = './html/feed.html';
                 } else {
-                    
                     alert("Username and/or Password are incorrect!");
                 }
             }
