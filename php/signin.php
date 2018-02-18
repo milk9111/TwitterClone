@@ -21,13 +21,12 @@ if ((isset($_POST['username']) && isset($_POST['password'])) || (isset($_GET['us
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':user', $user);
         $result = $stmt->execute();
-        if ($result == false) {
+        if (!$result) {
             echo "Failed to query";
         } else {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 if($row['password'] == $psw){
                     echo json_encode(array("status"=>200));
-                    //header('Location: ../html/feed.html');
                     exit();
                 }else {
                     echo json_encode(array("status"=>100));

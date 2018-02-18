@@ -2,10 +2,16 @@
  * On page load reset the values
  */
 $(function() {
-    console.log('loading page');
     $("#tweetInput").val("");
     $("#charsRemaining").text(140);
-    getTweetsForUser("connor");
+
+    let cookie = document.cookie;
+    let params = cookie.split(";");
+    let uname = params[0];
+
+    let $uname = $("#uname");
+    $uname.text(uname.substring(uname.indexOf("=")+1, uname.length));
+    getTweetsForUser($uname.text());
 });
 
 
@@ -34,6 +40,7 @@ function getTweetsForUser(username) {
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
             $("#tweets").html(xhttp.responseText);
+            $("#tweetInput").val("");
         }
     };
     xhttp.open("GET", "../php/get-tweets.php?user="+username, true);
@@ -66,6 +73,15 @@ function addNewTweetForUser(username) {
 }
 
 
+/**
+ * This function first verifies that neither of the sign in fields are empty.
+ * After, it makes a POST call to the signin.php that will make sure the password
+ * and username match.
+ *
+ * The response is a JSON object with a status. Status of 200 means the login was
+ * successful and to move to the feed page, otherwise alert the user that one of
+ * the fields is incorrect.
+ */
 function signin() {
     let username = $("#username").val();
     let password = $("#password").val();
@@ -78,20 +94,89 @@ function signin() {
         xhttp.open("POST", "./php/signin.php", true);
         xhttp.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
-                console.log(xhttp.responseText);
                 let response = JSON.parse(xhttp.responseText);
                 if (response['status'] === 200) {
                     window.location.href = './html/feed.html';
+                    document.cookie="username="+username+";";
                 } else {
                     alert("Username and/or Password are incorrect!");
                 }
-            }
-            console.log(this.readyState + ", " + this.status);
-            if (this.status === 404) {
-                console.log(xhttp.responseText);
             }
         };
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("username="+username+"&password="+password);
     }
+}
+
+
+function register() {
+    let username = $("#username").val();
+    let password = $("#password").val();
+    let passwordVerify = $("#passwordVerify").val();
+
+    let errorMsg = verifyRegisterFields(username, password, passwordVerify);
+
+    if (errorMsg === "") {
+        let xhttp = new XMLHttpRequest();
+
+        xhttp.open("POST", "../php/register.php", true);
+        xhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                let response = JSON.parse(xhttp.responseText);
+                if (response['status'] === 200) {
+                    window.location.href = 'feed.html';
+                    document.cookie="username="+username+";";
+                } else {
+                    if (response['status'] === 100) {
+                        alert("Username already taken!");
+                    } else if (response['status'] === 125) {
+                        alert("Back end failed to query users");
+                    } else {
+                        alert("Back end failed to insert new user");
+                    }
+                }
+            }
+        };
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("username="+username+"&password="+password);
+
+    } else {
+        alert (errorMsg);
+    }
+}
+
+
+function verifyRegisterFields (username, password, passwordVerify) {
+    let errorMsg = "";
+    if (username === "") {
+        errorMsg += "Username cannot be empty\n";
+    } else if (username.length < 6 || username.length > 25) {
+        errorMsg += "Username must be between 6 and 25 characters\n";
+    }
+
+    if (password === "") {
+        errorMsg += "Password cannot be empty\n";
+    } else if (password.length < 6 || password.length > 25) {
+        errorMsg += "Password must be between 6 and 25 characters\n";
+    }
+
+    if (passwordVerify === "") {
+        errorMsg += "Password verify cannot be empty\n";
+    } else if (passwordVerify.length < 6 || passwordVerify.length > 25) {
+        errorMsg += "Password verify must be between 6 and 25 characters\n";
+    } else if (passwordVerify !== password) {
+        errorMsg += "Both Password fields must match\n";
+    }
+
+    return errorMsg;
+}
+
+
+/**
+ * Signs the current user out by clearing the cookie and moving the window
+ * back to the sign in page.
+ */
+function signOut() {
+    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    window.location.href="../index.html";
 }

@@ -12,7 +12,7 @@ if (isset($_GET['user'])) {
         echo $pdo['response'];
     } else {
         $conn = $pdo['conn'];
-        $sql = "SELECT * FROM tweets WHERE username = :user";
+        $sql = "SELECT * FROM tweets WHERE username = :user ORDER BY date DESC";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':user', $user);
         $result = $stmt->execute();
