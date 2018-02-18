@@ -1,9 +1,25 @@
 
+body {
+    background-color: #c0deed;
+}
+
+h2 {
+    color: #0084b4;
+}
+
 .title {
     margin-top: 2em;
 }
 
 #tweets {
     margin-top: 1em;
-    border: 1px solid black;
+    border: 1px solid #00aced;
 }
+
+.tweet-date {
+    position: absolute;
+    right: 0px;
+    width: 100px;
+}
+
+

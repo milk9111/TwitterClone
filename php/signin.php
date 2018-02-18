@@ -2,6 +2,7 @@
 include("../connection.php");
 
 if ((isset($_POST['username']) && isset($_POST['password'])) || (isset($_GET['username']) && isset($_GET['password']))) {
+
     if (isset($_POST['username'])) {
         $user = $_POST['username'];
         $psw = $_POST['password'];
@@ -17,13 +18,14 @@ if ((isset($_POST['username']) && isset($_POST['password'])) || (isset($_GET['us
     } else {
         $conn = $pdo['conn'];
         $sql = "SELECT password FROM users WHERE username = :user";
-
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':user', $user);
         $result = $stmt->execute();
+
         if (!$result) {
-            echo "Failed to query";
+            echo json_encode(array("status"=>125));
         } else {
+            $empty = true;
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 if($row['password'] == $psw){
                     echo json_encode(array("status"=>200));
@@ -31,6 +33,10 @@ if ((isset($_POST['username']) && isset($_POST['password'])) || (isset($_GET['us
                 }else {
                     echo json_encode(array("status"=>100));
                 }
+                $empty = false;
+            }
+            if ($empty) {
+                echo json_encode(array("status"=>150));
             }
         }
         $conn = null;
@@ -38,5 +44,5 @@ if ((isset($_POST['username']) && isset($_POST['password'])) || (isset($_GET['us
 } else {
     echo "Username or Password is empty!";
 }
-?>
+
 

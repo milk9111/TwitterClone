@@ -41,6 +41,7 @@ function getTweetsForUser(username) {
         if (this.readyState === 4 && this.status === 200) {
             $("#tweets").html(xhttp.responseText);
             $("#tweetInput").val("");
+            $("#charsRemaining").text(140);
         }
     };
     xhttp.open("GET", "../php/get-tweets.php?user="+username, true);
@@ -94,6 +95,7 @@ function signin() {
         xhttp.open("POST", "./php/signin.php", true);
         xhttp.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
+                console.log(xhttp.responseText);
                 let response = JSON.parse(xhttp.responseText);
                 if (response['status'] === 200) {
                     window.location.href = './html/feed.html';
